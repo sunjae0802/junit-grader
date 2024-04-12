@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="1"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	>
+	<testcase name="testa" classname="testa" time="0.01" status="run">
+		<system-out>Filters: testa
+===============================================================================
+All tests passed (1 assertion in 1 test case)
+
+</system-out>
+	</testcase>
+</testsuite>

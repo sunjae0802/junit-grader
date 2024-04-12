@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="11"
+	failures="1"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="2"
+	timestamp="2023-01-31T14:40:05"
+	>
+	<testcase name="A::buffer_size_in_bytes(abc)" classname="A::buffer_size_in_bytes(abc)" time="0.0383301" status="fail">
+		<failure message=""/>
+		<system-out>Filters: buffer_size_in_bytes(abc)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_a is a Catch v2.13.9 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+buffer_size_in_bytes(abc)
+-------------------------------------------------------------------------------
+/home/sunjae/spring23/sunjae0802-s23-a2/tests/test_a.cpp:19
+...............................................................................
+
+/home/sunjae/spring23/sunjae0802-s23-a2/tests/test_a.cpp:22: FAILED:
+  REQUIRE( ret_value == 4 )
+with expansion:
+  0 == 4
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 1 | 1 failed
+
+</system-out>
+	</testcase>
+</testsuite>
