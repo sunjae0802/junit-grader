@@ -13,6 +13,8 @@ class TestResult(NamedTuple):
     success: bool
     output: str
 
+TIMEOUT = 10
+
 def process_junit(xml_filename: str) -> List[TestResult]:
     """Process a JUnit XML file and return a list of TestResults"""
     test_results = []
@@ -26,10 +28,10 @@ def process_junit(xml_filename: str) -> List[TestResult]:
 
 def process_junit_testcase(testcase: ET.Element) -> TestResult:
     """Process a JUnit XML testcase tag and return a TestResult"""
-    classname: str = testcase.attrib["classname"]
-    testname: str = testcase.attrib["name"]
-    success: bool = False
-    output: str = ""
+    classname = testcase.attrib["classname"]
+    testname = testcase.attrib["name"]
+    success = False
+    output = None
 
     # Some Testcases have an explicit "failure" tag
     if (failure_tag := testcase.find("failure")) is not None:
@@ -39,6 +41,10 @@ def process_junit_testcase(testcase: ET.Element) -> TestResult:
         if output is None:
             if (sout_tag := testcase.find("system-out")) is not None:
                 output = sout_tag.text
+        if output is None:
+            runtime = float(testcase.attrib["time"])
+            if runtime > TIMEOUT:
+                output = "TIMEOUT (infinite loop?)"
 
     # Other Testcases have a "status" tag instead
     elif 'status' in testcase.attrib:
@@ -51,7 +57,7 @@ def process_junit_testcase(testcase: ET.Element) -> TestResult:
                 output = sout_tag.text
             else:
                 runtime = float(testcase.attrib["time"])
-                if runtime > 9:
+                if runtime > TIMEOUT:
                     output = "TIMEOUT (infinite loop?)"
 
     # We treat all other Testcases as success
@@ -165,11 +171,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser("Convert junit test results to score")
     parser.add_argument("-s", "--scores_csv_file", default='scores.csv')
     parser.add_argument("-m", "--max_score", default=100)
+    parser.add_argument("-t", "--timeout", default=10, type=float)
     parser.add_argument("operation", choices=['generate', 'grade-txt', 'gradescope'])
     parser.add_argument("xml_files", nargs="+")
     args = parser.parse_args()
 
     if args:
+        TIMEOUT = args.timeout
+
         if args.operation == 'generate':
             generate_score(args.scores_csv_file, args.xml_files, args.max_score)
         elif args.operation == 'grade-txt':
